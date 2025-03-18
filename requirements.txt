@@ -1,0 +1,9 @@
+requests
+beautifulsoup4
+shodan
+censys
+argparse
+json
+re
+datetime
+os
