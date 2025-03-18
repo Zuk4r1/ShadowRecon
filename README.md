@@ -88,4 +88,4 @@ Este proyecto está licenciado bajo la licencia **MIT**. Consulte el archivo `LI
 ## Author
 Created with ❤️ by [@Zuk4r1](https://github.com/Zuk4r1).
 
-# ¡ Feliz hackeo! 🎯
+# ¡Feliz hackeo! 🎯
