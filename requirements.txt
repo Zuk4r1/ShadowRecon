@@ -3,6 +3,4 @@ beautifulsoup4
 shodan
 censys
 argparse
-re
 datetime
-os
