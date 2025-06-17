@@ -1,3 +1,10 @@
+argparse
+os
+sys
+threading
+logging
+random
+time
 shodan
 beautifulsoup4
 censys
