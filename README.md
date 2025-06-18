@@ -114,7 +114,7 @@ Created with ❤️ by [@Zuk4r1](https://github.com/Zuk4r1). – defensor del ha
 
 Esta herramienta está destinada exclusivamente a pruebas de seguridad con fines educativos y en entornos controlados con autorización expresa. El uso indebido es responsabilidad exclusiva del usuario.
 
-## ☕ ¡Apoya el proyecto!
+## 🤝 ¡Apoya el proyecto!
 
 Si esta herramienta te ha sido útil, puedes apoyar su desarrollo con una donación:
 
