@@ -104,7 +104,7 @@ python shadowrecon.py -u https://target.com --fuzz -t 50 -o results/
 | `-h, --help`     | Muestra la ayuda con todas las opciones disponibles. |
 
 ## ⚖️ LICENCIA
-Este proyecto está licenciado bajo la licencia **MIT**. Consulte el archivo `LICENCIA` para más detalles.
+Este proyecto está licenciado bajo la licencia **MIT**. Consulte el archivo [`LICENCIA`](https://github.com/Zuk4r1/ShadowRecon/blob/main/LICENSE) para más detalles.
 
 ## 👨‍💻 Autor
 
