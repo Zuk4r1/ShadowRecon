@@ -67,7 +67,12 @@ def threatcrowd_enum(domain):
     print(f"[+] Enumerando subdominios con ThreatCrowd para: {domain}")
     url = f"https://www.threatcrowd.org/searchApi/v2/domain/report/?domain={domain}"
     try:
-        response = requests.get(url, timeout=10)
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        response = requests.get(url, timeout=10, verify=False)
+        if not response.text or not response.text.strip().startswith('{'):
+            print("[-] ThreatCrowd devolvió una respuesta vacía o no JSON.")
+            return []
         data = response.json()
         subdomains = set(data.get("subdomains", []))
         return sorted([s for s in subdomains if domain in s])
@@ -79,7 +84,13 @@ def sublist3r_enum(domain):
     print(f"[+] Enumerando subdominios con Sublist3r API para: {domain}")
     url = f"https://api.sublist3r.com/search.php?domain={domain}"
     try:
-        response = requests.get(url, timeout=10)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (compatible; ShadowRecon/1.0; +https://github.com/)"
+        }
+        response = requests.get(url, timeout=10, headers=headers)
+        if not response.text or not response.text.strip().startswith('['):
+            print("[-] Sublist3r API devolvió una respuesta vacía o no JSON.")
+            return []
         subdomains = response.json()
         return sorted([s for s in subdomains if domain in s])
     except Exception as e:
