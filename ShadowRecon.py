@@ -65,23 +65,22 @@ logging.basicConfig(
 )
 logger = logging.getLogger("ShadowRecon")
 
-# --- NUEVO: Banner de advertencia legal ---
-LEGAL_WARNING = """
-[!] ADVERTENCIA LEGAL: El uso de este script sin autorización explícita es ilegal y puede ser detectado.
-    Solo úsalo en sistemas que poseas o tengas permiso explícito. El autor NO se responsabiliza por el mal uso.
-"""
- 
-BANNER = """
-\033[0;36m                                                                                                       ( (      \033[1;97m\033[4;37mSHADOWRECON\033[0;0m \033[4;31mv2.6\033[0;0m
-\033[0;36m    _____  _    _            _____    ____ __          __ _____   ______  _____  ____   _   _          ) )       \033[0;0mAuthor:\033[4;31m@Zuk4r1
-\033[0;36m   / ____|| |  | |    /\    |  __ \  / __ \\ \        / /|  __ \ |  ____|/ ____|/ __ \ | \ | |      ........     \033[0;0m▶ SHADOWRECON — INTELLIGENCE FRAMEWORK ◀
-\033[0;36m  | (___  | |__| |   /  \   | |  | || |  | |\ \      / / | |__) || |__  | |    | |  | ||  \| |      |      |]     \033[0;0m
-\033[0;36m   \___ \ |  __  |  / /\ \  | |  | || |  | | \ \ /\ / /  |  _  / |  __| | |    | |  | || . ` |      \      /      \033[0;0m
-\033[0;36m   ____) || |  | | / ____ \ | |__| || |__| |  \ V  V /   | | \ \ | |____| |____| |__| || |\  |       `----'        \033[0;0m
-\033[0;36m  |_____/ |_|  |_|/_/    \_\|_____/  \____/    \_/\_/    |_|  \_\|______|\_____|\____/ |_| \_|   Scanning target... \033[0;0m
-"""
+colorama.init(autoreset=True)
 
-print(LEGAL_WARNING)
+BANNER = r"""
+                                                                                                      ( (      
+    _____  _    _            _____    ____ __          __ _____   ______  _____  ____   _   _          ) )       
+   / ____|| |  | |    /\    |  __ \  / __ \\ \        / /|  __ \ |  ____|/ ____|/ __ \ | \ | |      ........    
+  | (___  | |__| |   /  \   | |  | || |  | |\ \      / / | |__) || |__  | |    | |  | ||  \| |      |      |]    
+   \___ \ |  __  |  / /\ \  | |  | || |  | | \ \ /\ / /  |  _  / |  __| | |    | |  | || . ` |      \      /      
+   ____) || |  | | / ____ \ | |__| || |__| |  \ V  V /   | | \ \ | |____| |____| |__| || |\  |       `----'        
+  |_____/ |_|  |_|/_/    \_\|_____/  \____/    \_/\_/    |_|  \_\|______|\_____|\____/ |_| \_|   Scanning target... 
+                          
+                          ▶ SHADOWRECON — INTELLIGENCE FRAMEWORK ◀
+                                      Author:@Zuk4r1
+  """
+
+print(colorama.Fore.CYAN + colorama.Style.BRIGHT + BANNER + colorama.Style.RESET_ALL)
 
 # --- NUEVO: User-Agents y proxies para rotación ---
 USER_AGENTS = [
