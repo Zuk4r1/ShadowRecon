@@ -1,10 +1,6 @@
 argparse
-os
-sys
-threading
 logging
 random
-time
 shodan
 beautifulsoup4
 censys
@@ -24,10 +20,6 @@ pandas
 pyOpenSSL
 requests
 datetime
-dns.resolver
 cryptography
 colorama
-concurrent.futures
-subprocess
 tldextract
-socket
