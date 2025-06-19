@@ -67,21 +67,34 @@ logger = logging.getLogger("ShadowRecon")
 
 colorama.init(autoreset=True)
 
+# --- NUEVO: Colores posibles para el banner ---
+BANNER_COLORS = [
+    colorama.Fore.CYAN,
+    colorama.Fore.GREEN,
+    colorama.Fore.MAGENTA,
+    colorama.Fore.YELLOW,
+    colorama.Fore.RED,
+    colorama.Fore.BLUE,
+    colorama.Fore.WHITE,
+]
+
 BANNER = r"""
-                                                                                                      ( (      
-    _____  _    _            _____    ____ __          __ _____   ______  _____  ____   _   _          ) )       
-   / ____|| |  | |    /\    |  __ \  / __ \\ \        / /|  __ \ |  ____|/ ____|/ __ \ | \ | |      ........    
-  | (___  | |__| |   /  \   | |  | || |  | |\ \      / / | |__) || |__  | |    | |  | ||  \| |      |      |]    
-   \___ \ |  __  |  / /\ \  | |  | || |  | | \ \ /\ / /  |  _  / |  __| | |    | |  | || . ` |      \      /      
-   ____) || |  | | / ____ \ | |__| || |__| |  \ V  V /   | | \ \ | |____| |____| |__| || |\  |       `----'        
+                                                                                                      ( (
+    _____  _    _            _____    ____ __          __ _____   ______  _____  ____   _   _          ) )
+   / ____|| |  | |    /\    |  __ \  / __ \\ \        / /|  __ \ |  ____|/ ____|/ __ \ | \ | |      ........
+  | (___  | |__| |   /  \   | |  | || |  | |\ \      / / | |__) || |__  | |    | |  | ||  \| |      |      |]
+   \___ \ |  __  |  / /\ \  | |  | || |  | | \ \ /\ / /  |  _  / |  __| | |    | |  | || . ` |      \      /
+   ____) || |  | | / ____ \ | |__| || |__| |  \ V  V /   | | \ \ | |____| |____| |__| || |\  |       `----' 
   |_____/ |_|  |_|/_/    \_\|_____/  \____/    \_/\_/    |_|  \_\|______|\_____|\____/ |_| \_|   Scanning target... 
-                          
+
                           ▶ SHADOWRECON — INTELLIGENCE FRAMEWORK ◀
                                       Author:@Zuk4r1
   """
 
-print(colorama.Fore.CYAN + colorama.Style.BRIGHT + BANNER + colorama.Style.RESET_ALL)
-
+# --- NUEVO: Selecciona un color aleatorio para el banner ---
+banner_color = random.choice(BANNER_COLORS)
+print(banner_color + colorama.Style.BRIGHT + BANNER + colorama.Style.RESET_ALL)
+    
 # --- NUEVO: User-Agents y proxies para rotación ---
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -157,9 +170,14 @@ def main():
     parser.add_argument("--useragent", help="User-Agent personalizado")
     parser.add_argument("--proxy", help="Proxy HTTP/SOCKS personalizado")
     parser.add_argument("--timeout", type=int, default=120, help="Timeout global por módulo (default: 120s)")
+    parser.add_argument("--github-token", help="Token personal de GitHub para aumentar el límite de la API")
 
     args = parser.parse_args()
     results = {}
+
+    # --- NUEVO: Normalizar URL si falta el esquema ---
+    if args.url and not args.url.startswith(("http://", "https://")):
+        args.url = "https://" + args.url
 
     # --- NUEVO: Configuración global de requests ---
     if args.insecure:
@@ -177,13 +195,22 @@ def main():
         with concurrent.futures.ThreadPoolExecutor(max_workers=args.threads) as executor:
             if args.domain:
                 tasks.append(executor.submit(run_module, enumerate_subdomains, args.domain, timeout=args.timeout))
-                tasks.append(executor.submit(run_module, search_github_secrets, args.domain, timeout=args.timeout))
+                # PASA EL TOKEN SI EXISTE
+                if args.github_token:
+                    tasks.append(executor.submit(run_module, search_github_secrets, args.domain, github_token=args.github_token, timeout=args.timeout))
+                else:
+                    tasks.append(executor.submit(run_module, search_github_secrets, args.domain, timeout=args.timeout))
                 tasks.append(executor.submit(run_module, scan_s3_buckets, args.domain, timeout=args.timeout))
-                tasks.append(executor.submit(run_module, run_nuclei_scan, args.domain, timeout=args.timeout))
+                # CORREGIDO: Añadir argumentos requeridos a run_nuclei_scan
+                tasks.append(executor.submit(
+                    run_module, run_nuclei_scan, args.domain,
+                    severity="medium", aggressive=args.aggressive, timeout=args.timeout
+                ))
                 tasks.append(executor.submit(run_module, run_osint_scan, args.domain, timeout=args.timeout))
                 tasks.append(executor.submit(run_module, aggressive_port_scan, args.domain, threads=args.threads, timeout=args.timeout))
             if args.url:
-                tasks.append(executor.submit(run_module, fuzz_directories, args.url, args.threads, timeout=args.timeout))
+                # CORREGIDO: Pasar threads como argumento nombrado
+                tasks.append(executor.submit(run_module, fuzz_directories, args.url, threads=args.threads, timeout=args.timeout))
                 tasks.append(executor.submit(run_module, extract_api_endpoints, args.url, timeout=args.timeout))
                 tasks.append(executor.submit(run_module, scan_security_headers, args.url, timeout=args.timeout))
                 tasks.append(executor.submit(run_module, fingerprint_technologies, args.url, timeout=args.timeout))
@@ -216,13 +243,20 @@ def main():
             if args.domain and args.subs:
                 logger.info("[*] Enumerando subdominios...")
                 results["subdomains"] = run_module(enumerate_subdomains, args.domain, timeout=args.timeout)
+                if results.get("subdomains"):
+                    logger.info(f"[+] Subdominios encontrados ({len(results['subdomains'])}):")
+                    for sub in results["subdomains"]:
+                        print(f" - {sub}")
+                else:
+                    logger.warning("[!] No se encontraron subdominios o hubo un error en la extracción.")
         except Exception as e:
             logger.error(f"[ERROR] Subdomain enumeration: {e}")
 
         try:
             if args.url and args.fuzz:
                 logger.info("[*] Ejecutando fuzzing...")
-                results["fuzzing"] = run_module(fuzz_directories, args.url, args.threads, timeout=args.timeout)
+                # CORREGIDO: Pasar threads como argumento nombrado
+                results["fuzzing"] = run_module(fuzz_directories, args.url, threads=args.threads, timeout=args.timeout)
         except Exception as e:
             logger.error(f"[ERROR] Fuzzing: {e}")
 
@@ -236,7 +270,11 @@ def main():
         try:
             if args.domain and args.github:
                 logger.info("[*] Buscando credenciales en GitHub...")
-                results["github_secrets"] = run_module(search_github_secrets, args.domain, timeout=args.timeout)
+                # PASA EL TOKEN SI EXISTE
+                if args.github_token:
+                    results["github_secrets"] = run_module(search_github_secrets, args.domain, github_token=args.github_token, timeout=args.timeout)
+                else:
+                    results["github_secrets"] = run_module(search_github_secrets, args.domain, timeout=args.timeout)
         except Exception as e:
             logger.error(f"[ERROR] GitHub secrets: {e}")
 
@@ -250,7 +288,11 @@ def main():
         try:
             if args.domain and args.nuclei:
                 logger.info("[*] Ejecutando escaneo con Nuclei...")
-                results["vulnerabilities"] = run_module(run_nuclei_scan, args.domain, timeout=args.timeout)
+                # CORREGIDO: Añadir argumentos requeridos a run_nuclei_scan
+                results["vulnerabilities"] = run_module(
+                    run_nuclei_scan, args.domain,
+                    severity="medium", aggressive=args.aggressive, timeout=args.timeout
+                )
         except Exception as e:
             logger.error(f"[ERROR] Nuclei scan: {e}")
 
