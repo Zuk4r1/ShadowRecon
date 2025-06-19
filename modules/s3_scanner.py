@@ -61,7 +61,12 @@ def scan_s3_buckets(domain):
     print(f"[+] Escaneando buckets S3 asociados a {domain}...")
 
     output_file = "s3_buckets.txt"
-    os.system(f"python3 ~/LazyS3/lazys3.py -d {domain} -o {output_file}")
+    lazy_s3_path = "/ShadowRecon/modules/lazys3.rb"
+    # Check if LazyS3 script exists before running
+    if os.path.exists(lazy_s3_path):
+        os.system(f"ruby {lazy_s3_path} -d {domain} -o {output_file}")
+    else:
+        print(f"[-] LazyS3 script not found at {lazy_s3_path}, skipping LazyS3 enumeration.")
 
     # Leer resultados de LazyS3
     s3_buckets = []
