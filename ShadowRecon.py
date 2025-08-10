@@ -88,7 +88,7 @@ BANNER = r"""
   |_____/ |_|  |_|/_/    \_\|_____/  \____/    \_/\_/    |_|  \_\|______|\_____|\____/ |_| \_|   Scanning target... 
 
                           ▶ SHADOWRECON — INTELLIGENCE FRAMEWORK ◀
-                                      Author:@Zuk4r1
+                                      🐉Author:@Zuk4r1
   """
 
 # --- NUEVO: Selecciona un color aleatorio para el banner ---
@@ -388,3 +388,4 @@ if __name__ == "__main__":
     except Exception as e:
         logger.critical(f"[FATAL] Error inesperado: {e}")
         sys.exit(1)
+
