@@ -114,12 +114,10 @@ Created with ❤️ by [@Zuk4r1](https://github.com/Zuk4r1). – defensor del ha
 
 Esta herramienta está destinada exclusivamente a pruebas de seguridad con fines educativos y en entornos controlados con autorización expresa. El uso indebido es responsabilidad exclusiva del usuario.
 
-## 🤝 ¡Apoya el proyecto!
+## ☕ Apoya mis proyectos
+Si te resultan útiles mis herramientas, considera dar una ⭐ en GitHub o invitarme un café. ¡Gracias!
 
-Si esta herramienta te ha sido útil, puedes apoyar su desarrollo con una donación:
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/investigacq)  [![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/paypalme/babiloniaetica)
 
-☕ [Buy Me a Coffee](https://buymeacoffee.com/investigacq)
-
-💸 [PayPal](https://www.paypal.com/paypalme/babiloniaetica)
 
 # ¡Feliz hackeo! 🎯
